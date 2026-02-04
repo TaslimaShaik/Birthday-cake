@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Happy Birthday Cake Animation</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(circle at top, #222 0, #000 60%);
+      overflow: hidden;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    .scene {
+      position: relative;
+      width: 400px;
+      height: 400px;
+    }
+
+    /* Birthday text */
+    .message {
+      position: absolute;
+      top: 20px;
+      width: 100%;
+      text-align: center;
+      color: #ffd700;
+      font-size: 28px;
+      letter-spacing: 2px;
+      text-shadow: 0 0 6px #ff0, 0 0 12px #f80;
+      animation: glow 2s infinite alternate;
+    }
+
+    @keyframes glow {
+      from { text-shadow: 0 0 4px #ff0, 0 0 8px #f80; }
+      to   { text-shadow: 0 0 10px #fff, 0 0 20px #ff69b4; }
+    }
+
+    /* Cake base container */
+    .cake {
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 260px;
+      height: 180px;
+      perspective: 800px;
+    }
+
+    /* Plate */
+    .plate {
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 280px;
+      height: 40px;
+      background: radial-gradient(circle at 50% 0, #fff 0, #ddd 60%, #bbb 100%);
+      border-radius: 50%;
+      box-shadow: 0 20px 25px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Cake layers */
+    .layer {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      border-radius: 16px 16px 10px 10px;
+      box-shadow: 0 12px 18px rgba(0, 0, 0, 0.35);
+      animation: rise 1.2s ease-out forwards;
+      opacity: 0;
+    }
+
+    .layer.bottom {
+      width: 240px;
+      height: 70px;
+      bottom: 40px;
+      background: linear-gradient(#b15d30, #8b3e1e);
+      animation-delay: 0.2s;
+    }
+
+    .layer.middle {
+      width: 200px;
+      height: 55px;
+      bottom: 90px;
+      background: linear-gradient(#f5b6d5, #e28ab5);
+      animation-delay: 0.6s;
+    }
+
+    .layer.top {
+      width: 160px;
+      height: 45px;
+      bottom: 135px;
+      background: linear-gradient(#ffefd5, #f1c27d);
+      animation-delay: 1s;
+    }
+
+    @keyframes rise {
+      0%   { transform: translate(-50%, 40px); opacity: 0; }
+      100% { transform: translate(-50%, 0);    opacity: 1; }
+    }
+
+    /* Icing drips */
+    .icing {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 170px;
+      height: 35px;
+      bottom: 155px;
+      background: #fff0f5;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+      animation: dropIcing 1s ease-out 1.2s forwards;
+      opacity: 0;
+    }
+
+    .icing::before,
+    .icing::after {
+      content: "";
+      position: absolute;
+      width: 200%;
+      height: 30px;
+      background: radial-gradient(circle at 10px 15px, #fff 0, #fff 12px, transparent 13px);
+      top: 10px;
+      left: -20%;
+      background-size: 30px 30px;
+    }
+
+    @keyframes dropIcing {
+      0%   { transform: translate(-50%, -20px); opacity: 0; }
+      100% { transform: translate(-50%, 0);     opacity: 1; }
+    }
+
+    /* Candles container */
+    .candles {
+      position: absolute;
+      bottom: 175px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 14px;
+      animation: appearCandles 0.6s ease-out 1.5s forwards;
+      opacity: 0;
+    }
+
+    @keyframes appearCandles {
+      0%   { transform: translate(-50%, 10px); opacity: 0; }
+      100% { transform: translate(-50%, 0);    opacity: 1; }
+    }
+
+    .candle {
+      position: relative;
+      width: 10px;
+      height: 40px;
+      background: repeating-linear-gradient(
+        to bottom,
+        #fff 0,
+        #fff 6px,
+        #ff69b4 6px,
+        #ff69b4 12px
+      );
+      border-radius: 4px;
+      box-shadow: 0 0 3px rgba(255,255,255,0.6);
+      cursor: pointer;
+    }
+
+    .candle::before {
+      content: "";
+      position: absolute;
+      top: -6px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 2px;
+      height: 8px;
+      background: #222;
+      border-radius: 1px;
+    }
+
+    /* Flame */
+    .flame {
+      position: absolute;
+      top: -18px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 16px;
+      height: 24px;
+      background: radial-gradient(circle at 50% 30%, #fff 0, #ffe066 40%, #ff8c00 70%, transparent 72%);
+      border-radius: 50% 50% 50% 50%;
+      filter: blur(0.4px);
+      transform-origin: 50% 80%;
+      animation: flicker 0.18s infinite alternate;
+    }
+
+    @keyframes flicker {
+      from { transform: translateX(-50%) scale(1) rotate(-4deg); opacity: 0.9; }
+      to   { transform: translateX(-50%) scale(1.15) rotate(4deg); opacity: 1; }
+    }
+
+    .flame.off {
+      animation: blowOut 0.4s forwards;
+    }
+
+    @keyframes blowOut {
+      0%   { transform: translateX(-50%) scale(1); opacity: 1; }
+      100% { transform: translateX(-50%) scale(0); opacity: 0; }
+    }
+
+    /* Sparkles */
+    .sparkle {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: #fff;
+      box-shadow: 0 0 6px #fff;
+      opacity: 0;
+      animation: sparkle 1.4s linear infinite;
+    }
+
+    @keyframes sparkle {
+      0%   { transform: translateY(0) scale(0.2); opacity: 0; }
+      40%  { opacity: 1; }
+      100% { transform: translateY(-40px) scale(1); opacity: 0; }
+    }
+
+    /* Footer hint */
+    .hint {
+      position: absolute;
+      bottom: 8px;
+      width: 100%;
+      text-align: center;
+      font-size: 12px;
+      color: #ccc;
+      opacity: 0.9;
+    }
+  </style>
+</head>
+<body>
+  <div class="scene">
+    <div class="message">🎉 Happy Birthday!🎂Bujjuluuuuu</div>
+
+    <div class="cake">
+      <div class="plate"></div>
+
+      <div class="layer bottom"></div>
+      <div class="layer middle"></div>
+      <div class="layer top"></div>
+
+      <div class="icing"></div>
+
+      <div class="candles">
+        <div class="candle">
+          <div class="flame"></div>
+        </div>
+        <div class="candle">
+          <div class="flame"></div>
+        </div>
+        <div class="candle">
+          <div class="flame"></div>
+        </div>
+        <div class="candle">
+          <div class="flame"></div>
+        </div>
+        <div class="candle">
+          <div class="flame"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hint">Click on the flames to blow out the candles.</div>
+  </div>
+
+  <script>
+    // Turn off a flame when its candle is clicked
+    document.querySelectorAll(".candle").forEach(candle => {
+      candle.addEventListener("click", () => {
+        const flame = candle.querySelector(".flame");
+        if (!flame.classList.contains("off")) {
+          flame.classList.add("off");
+        }
+      });
+    });
+
+    // Add a few sparkles around the cake
+    function addSparkles(count) {
+      const scene = document.querySelector(".scene");
+      for (let i = 0; i < count; i++) {
+        const s = document.createElement("div");
+        s.className = "sparkle";
+        const angle = Math.random() * Math.PI * 2;
+        const radius = 120 + Math.random() * 40;
+        const x = 200 + Math.cos(angle) * radius;
+        const y = 220 + Math.sin(angle) * radius;
+        s.style.left = x + "px";
+        s.style.top = y + "px";
+        s.style.animationDelay = (Math.random() * 1.4) + "s";
+        scene.appendChild(s);
+      }
+    }
+
+    addSparkles(16);
+  </script>
+</body>
+</html>
